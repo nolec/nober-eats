@@ -9,6 +9,7 @@ type User {
   email: String!
   password: String!
   role: UserRole!
+  verified: Boolean!
 }
 
 """
@@ -23,6 +24,11 @@ enum UserRole {
 }
 
 type CreateAccountOutput {
+  error: String
+  ok: Boolean!
+}
+
+type EditProfileOutput {
   error: String
   ok: Boolean!
 }
@@ -46,8 +52,14 @@ type Query {
 }
 
 type Mutation {
+  editProfile(input: EditProfileInput!): EditProfileOutput!
   createAccount(input: CreateAccountInput!): CreateAccountOutput!
   login(input: LoginInput!): LoginOutput!
+}
+
+input EditProfileInput {
+  email: String
+  password: String
 }
 
 input CreateAccountInput {
