@@ -61,19 +61,10 @@ export class UsersResolver {
   }
 
   @Mutation(returns => VerifyEmailOutput)
-  async verifyEmail(@Args('input') verifyEmailInput: VerifyEmailInput) {
-    try {
-      this.usersService.verifyEmail(verifyEmailInput.code);
-      return {
-        ok: true,
-      };
-    } catch (error) {
-      return {
-        ok: false,
-        error,
-      };
-    }
+  verifyEmail(@Args('input') { code }: VerifyEmailInput) {
+    return this.usersService.verifyEmail(code);
   }
+
   @Query(returns => Boolean)
   getUsers(): boolean {
     return true;
