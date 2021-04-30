@@ -5,24 +5,21 @@ import {
   RequestMethod,
 } from '@nestjs/common';
 import * as Joi from 'joi';
-import { RestaurantsService } from './restaurants/restaurants.service';
-import { RestaurantsResolver } from './restaurants/restaurants.resolver';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { RestaurantsModule } from './restaurants/restaurants.module';
 import { join } from 'path';
-import { Restaurant } from './restaurants/entities/restaurant.entity';
 import { UsersModule } from './users/users.module';
-import { CommonModule } from './common/common.module';
 import { User } from './users/entities/user.entity';
 import { JwtModule } from './jwt/jwt.module';
 import { JwtMiddleware } from './jwt/jwt.middleware';
 import { AuthModule } from './auth/auth.module';
 import { Verification } from './users/entities/verification.entity';
 import { MailModule } from './mail/mail.module';
+import { Restaurant } from './restaurants/entities/restaurant.entity';
 
-console.log(Joi);
+// console.log(Joi);
 
 @Module({
   imports: [
@@ -30,6 +27,7 @@ console.log(Joi);
       isGlobal: true,
       envFilePath: process.env.NODE_ENV === 'dev' ? '.env.dev' : '.env.dev',
       ignoreEnvFile: process.env.NODE_ENV === 'prod',
+      //자바스크립트용의 가장 강력한 스키마 설명언어이자 데이터 유효성 검사 툴
       validationSchema: Joi.object({
         NODE_ENV: Joi.string()
           .valid('dev', 'prod')
@@ -54,7 +52,7 @@ console.log(Joi);
       database: process.env.DB_NAME,
       synchronize: process.env.NODE_ENV !== 'prod',
       logging: true,
-      entities: [User, Verification],
+      entities: [User, Verification, Restaurant],
     }),
     GraphQLModule.forRoot({
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
@@ -68,6 +66,7 @@ console.log(Joi);
     }),
     UsersModule,
     AuthModule,
+    RestaurantsModule,
   ],
   controllers: [],
   providers: [],

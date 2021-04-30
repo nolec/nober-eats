@@ -2,6 +2,24 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Restaurant {
+  id: Float!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  name: String!
+
+  """그래프 큐엘 기본값 true"""
+  isVegan: Boolean
+  address: String!
+  ownerName: String!
+  categoryName: String!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
 type User {
   id: Float!
   createdAt: DateTime!
@@ -11,11 +29,6 @@ type User {
   role: UserRole!
   verified: Boolean!
 }
-
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
 
 enum UserRole {
   client
@@ -51,16 +64,48 @@ type VerifyEmailOutput {
 }
 
 type Query {
+  restaurants: [Restaurant!]!
   me: User!
   userProfile(userId: Float!): UserProfileOutput!
   getUsers: Boolean!
 }
 
 type Mutation {
+  createRestaurant(input: CreateRestaurantDto!): Boolean!
+  updateRestaurant(input: UpdateRestaurantDto!): Boolean!
   createAccount(input: CreateAccountInput!): CreateAccountOutput!
   login(input: LoginInput!): LoginOutput!
   editProfile(input: EditProfileInput!): EditProfileOutput!
   verifyEmail(input: VerifyEmailInput!): VerifyEmailOutput!
+}
+
+input CreateRestaurantDto {
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  name: String!
+
+  """그래프 큐엘 기본값 true"""
+  isVegan: Boolean
+  address: String!
+  ownerName: String!
+  categoryName: String!
+}
+
+input UpdateRestaurantDto {
+  id: Float!
+  data: UpdateRestaurantInputType!
+}
+
+input UpdateRestaurantInputType {
+  createdAt: DateTime
+  updatedAt: DateTime
+  name: String
+
+  """그래프 큐엘 기본값 true"""
+  isVegan: Boolean
+  address: String
+  ownerName: String
+  categoryName: String
 }
 
 input CreateAccountInput {

@@ -21,7 +21,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
-    "@nestjs/common": "^7.0.0",
+    "@nestjs/common": "^7.6.15",
     "@nestjs/config": "^0.6.1",
     "@nestjs/core": "^7.0.0",
     "@nestjs/graphql": "^7.8.2",
@@ -29,6 +29,7 @@
     "@nestjs/typeorm": "^7.1.5",
     "apollo-server-express": "^2.19.0",
     "bcrypt": "^5.0.0",
+    "class-transformer": "^0.3.1",
     "class-validator": "^0.12.2",
     "cross-env": "^7.0.3",
     "form-data": "^4.0.0",

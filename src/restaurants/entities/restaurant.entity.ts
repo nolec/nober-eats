@@ -1,13 +1,11 @@
 import { ObjectType, Field } from '@nestjs/graphql';
 import { IsBoolean, IsOptional, IsString, Length } from 'class-validator';
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column } from 'typeorm';
+import { CoreEntitiy } from '../../common/entities/core.entity';
 
 @ObjectType()
 @Entity()
-export class Restaurant {
-  @Field(() => Number)
-  @PrimaryGeneratedColumn()
-  id: number;
+export class Restaurant extends CoreEntitiy{
 
   @Field()
   @Column()
