@@ -35,7 +35,7 @@ import { Restaurant } from './restaurants/entities/restaurant.entity';
         DB_HOST: Joi.string().required(),
         DB_PORT: Joi.string().required(),
         DB_USERNAME: Joi.string().required(),
-        // DB_PASSWORD: Joi.string().required(),
+        DB_PASSWORD: Joi.string().required(),
         DB_NAME: Joi.string().required(),
         PRIVATE_KEY: Joi.string().required(),
         // MAILGUN_API_KEY: Joi.string().required(),

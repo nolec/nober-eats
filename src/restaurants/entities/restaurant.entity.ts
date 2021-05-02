@@ -5,8 +5,7 @@ import { CoreEntitiy } from '../../common/entities/core.entity';
 
 @ObjectType()
 @Entity()
-export class Restaurant extends CoreEntitiy{
-
+export class Restaurant extends CoreEntitiy {
   @Field()
   @Column()
   @IsString()

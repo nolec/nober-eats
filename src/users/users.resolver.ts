@@ -21,13 +21,13 @@ export class UsersResolver {
   async createAccount(
     @Args('input') createAccountInput: CreateAccountInput,
   ): Promise<CreateAccountOutput> {
-    return await this.usersService.createAccount(createAccountInput);
+    return this.usersService.createAccount(createAccountInput);
   }
 
   @Mutation(returns => LoginOutput)
   async login(@Args('input') loginInput: LoginInput): Promise<LoginOutput> {
     console.log(await this.usersService.login(loginInput));
-    return await this.usersService.login(loginInput);
+    return this.usersService.login(loginInput);
   }
 
   @Query(returns => User)
@@ -41,7 +41,7 @@ export class UsersResolver {
   async userProfile(
     @Args() userProfileInput: UserProfileInput,
   ): Promise<UserProfileOutput> {
-    return await this.usersService.findById(userProfileInput.userId);
+    return this.usersService.findById(userProfileInput.userId);
   }
 
   @UseGuards(AuthGuard)
@@ -50,7 +50,7 @@ export class UsersResolver {
     @AuthUser() authUser: User,
     @Args('input') editProfileInput: EditProfileInput,
   ): Promise<EditProfileOutput> {
-    return this.usersService.editProfile(authUser.id, editProfileInput);
+    return this.usersService.editProfile(authUser.id, { ...editProfileInput });
   }
 
   @Mutation(returns => VerifyEmailOutput)

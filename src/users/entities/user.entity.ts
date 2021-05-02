@@ -11,17 +11,21 @@ import { InternalServerErrorException } from '@nestjs/common';
 import { IsEmail, IsEnum, IsString } from 'class-validator';
 
 enum UserRole {
-  'client',
-  'owner',
-  'delivery',
+  'Client',
+  'Owner',
+  'Delivery',
 }
 registerEnumType(UserRole, { name: 'UserRole' });
-
+//인풋 타입 --- argument 등 인풋 데이터와 관련 있음
 @InputType({ isAbstract: true })
+//오브젝트 타입 --- 그래프 큐엘의 스키마 설정과 관련
 @ObjectType()
+//엔티티 --- DB 스키마와 관련
 @Entity()
 export class User extends CoreEntitiy {
+  //컬럼은 DB와 관련
   @Column({ unique: true })
+  //그래프 큐엘의 필드와 관련
   @Field(type => String)
   @IsEmail()
   email: string;
