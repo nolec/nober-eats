@@ -14,29 +14,25 @@ export class MailService {
     subject: string,
     template: string,
     emailVars: EmailVar[],
-  ): Promise<boolean> {
+  ): Promise<any> {
     const form = new FormData();
     form.append('from', `Nolec from 노버  <mailgun@${this.options.domain}>`);
-    form.append('to', `jlkrg7@gmail.com`);
+    form.append('to', `ca10205@naver.com`);
     form.append('subject', subject);
     form.append('template', template);
     emailVars.forEach(eVar => form.append(`v:${eVar.key}`, eVar.value));
     try {
-      await got.post(
-        `https://api.mailgun.net/v3/${this.options.domain}/messages`,
-        {
-          headers: {
-            Authorization: `Basic ${Buffer.from(
-              `api:${this.options.apiKey}`,
-            ).toString('base64')}`,
-          },
-          body: form,
+      await got(`https://api.mailgun.net/v3/${this.options.domain}/messages`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Basic ${Buffer.from(
+            `api:${this.options.apiKey}`,
+          ).toString('base64')}`,
         },
-      );
-      return true;
+        body: form,
+      });
     } catch (error) {
       console.log(error);
-      return false;
     }
   }
 
