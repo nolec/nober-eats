@@ -11,10 +11,10 @@ import { InternalServerErrorException } from '@nestjs/common';
 import { IsEmail, IsEnum, IsString } from 'class-validator';
 import { Restaurant } from 'src/restaurants/entities/restaurant.entity';
 
-enum UserRole {
-  'Client',
-  'Owner',
-  'Delivery',
+export enum UserRole {
+  Client = 'Client',
+  Owner = 'Owner',
+  Delivery = 'Delivery',
 }
 registerEnumType(UserRole, { name: 'UserRole' });
 //인풋 타입 --- argument 등 인풋 데이터와 관련 있음
@@ -50,6 +50,7 @@ export class User extends CoreEntitiy {
   @OneToMany(
     type => Restaurant,
     restaurant => restaurant.owner,
+    { onDelete: 'CASCADE' },
   )
   restaurants: Restaurant[];
 

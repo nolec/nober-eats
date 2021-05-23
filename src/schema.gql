@@ -29,8 +29,28 @@ type Category {
   createdAt: DateTime!
   updatedAt: DateTime!
   name: String!
-  coverImage: String!
-  restaurants: [Restaurant!]!
+  coverImage: String
+  slug: String!
+  restaurants: [Restaurant!]
+  restaurantCount: Float!
+}
+
+type DishOption {
+  name: String!
+  choices: [String!]
+  extra: Int
+}
+
+type Dish {
+  id: Float!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  name: String!
+  price: Int!
+  photo: String
+  description: String!
+  restaurant: Restaurant!
+  options: [DishOption!]
 }
 
 type Restaurant {
@@ -42,6 +62,63 @@ type Restaurant {
   address: String!
   category: Category
   owner: User!
+  menu: [Dish!]!
+}
+
+type CreateRestaurantOutput {
+  error: String
+  ok: Boolean!
+}
+
+type EditRestaurantOutput {
+  error: String
+  ok: Boolean!
+}
+
+type DeleteRestaurantOutput {
+  error: String
+  ok: Boolean!
+}
+
+type AllCategoryOutput {
+  error: String
+  ok: Boolean!
+  categories: [Category!]
+}
+
+type CategoryOutput {
+  error: String
+  ok: Boolean!
+  totalPages: Int
+  totalResults: Int
+  category: Category
+}
+
+type RestaurantsOutput {
+  error: String
+  ok: Boolean!
+  totalPages: Int
+  totalResults: Int
+  results: [Restaurant!]
+}
+
+type SearchRestaurantOutput {
+  error: String
+  ok: Boolean!
+  totalPages: Int
+  totalResults: Int
+  restaurants: [Restaurant!]
+}
+
+type RestaurantOutput {
+  error: String
+  ok: Boolean!
+  restaurant: Restaurant
+}
+
+type CreateDishOutput {
+  error: String
+  ok: Boolean!
 }
 
 type CreateAccountOutput {
@@ -72,14 +149,39 @@ type VerifyEmailOutput {
 }
 
 type Query {
+  allCategories: AllCategoryOutput!
+  category(input: CategoryInput!): CategoryOutput!
+  restaurants(input: RestaurantsInput!): RestaurantsOutput!
+  restaurant(input: RestaurantInput!): RestaurantOutput!
+  searchRestaurant(input: SearchRestaurantInput!): SearchRestaurantOutput!
   me: User!
   userProfile(userId: Float!): UserProfileOutput!
   getUsers: Boolean!
 }
 
+input CategoryInput {
+  page: Int = 1
+  slug: String!
+}
+
+input RestaurantsInput {
+  page: Int = 1
+}
+
+input RestaurantInput {
+  restaurantId: Int!
+}
+
+input SearchRestaurantInput {
+  page: Int = 1
+  query: String!
+}
+
 type Mutation {
-  createRestaurant(input: CreateRestaurantInputType!): Boolean!
-  updateRestaurant(input: UpdateRestaurantDto!): Boolean!
+  createRestaurant(input: CreateRestaurantInputType!): CreateRestaurantOutput!
+  editRestaurant(input: EditRestaurantInput!): EditRestaurantOutput!
+  deleteRestaurant(input: DeleteRestaurantInput!): DeleteRestaurantOutput!
+  createDish(input: CreateDishInput!): CreateDishOutput!
   createAccount(input: CreateAccountInput!): CreateAccountOutput!
   login(input: LoginInput!): LoginOutput!
   editProfile(input: EditProfileInput!): EditProfileOutput!
@@ -87,24 +189,36 @@ type Mutation {
 }
 
 input CreateRestaurantInputType {
-  createdAt: DateTime!
-  updatedAt: DateTime!
   name: String!
   coverImage: String!
   address: String!
+  categoryName: String!
 }
 
-input UpdateRestaurantDto {
-  id: Float!
-  data: UpdateRestaurantInputType!
+input EditRestaurantInput {
+  name: String!
+  coverImage: String!
+  address: String!
+  categoryName: String!
+  restaurantId: Float!
 }
 
-input UpdateRestaurantInputType {
-  createdAt: DateTime
-  updatedAt: DateTime
-  name: String
-  coverImage: String
-  address: String
+input DeleteRestaurantInput {
+  restaurantId: Float!
+}
+
+input CreateDishInput {
+  name: String!
+  price: Int!
+  description: String!
+  options: [DisiOptionInputType!]
+  restaurantId: Int!
+}
+
+input DisiOptionInputType {
+  name: String!
+  choices: [String!]
+  extra: Int
 }
 
 input CreateAccountInput {
