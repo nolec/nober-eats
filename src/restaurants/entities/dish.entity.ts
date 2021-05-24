@@ -17,7 +17,7 @@ class DishOption {
   extra?: number;
 }
 
-@InputType('dishInputType', { isAbstract: true })
+@InputType('DishInputType', { isAbstract: true })
 @ObjectType()
 @Entity()
 export class Dish extends CoreEntitiy {

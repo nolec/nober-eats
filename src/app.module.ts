@@ -20,6 +20,7 @@ import { MailModule } from './mail/mail.module';
 import { Restaurant } from './restaurants/entities/restaurant.entity';
 import { Category } from './restaurants/entities/category.entity';
 import { Dish } from './restaurants/entities/dish.entity';
+import { OrdersModule } from './orders/orders.module';
 
 // console.log(Joi);
 
@@ -69,6 +70,7 @@ import { Dish } from './restaurants/entities/dish.entity';
     AuthModule,
     UsersModule,
     RestaurantsModule,
+    OrdersModule,
   ],
   controllers: [],
   providers: [],

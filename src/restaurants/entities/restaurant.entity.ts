@@ -1,5 +1,6 @@
 import { ObjectType, Field, InputType } from '@nestjs/graphql';
 import { IsBoolean, IsOptional, IsString, Length } from 'class-validator';
+import { Order } from 'src/orders/entities/order.entity';
 import { User } from 'src/users/entities/user.entity';
 import { Entity, Column, ManyToOne, RelationId, OneToMany } from 'typeorm';
 import { CoreEntitiy } from '../../common/entities/core.entity';
@@ -41,8 +42,16 @@ export class Restaurant extends CoreEntitiy {
   @ManyToOne(
     type => User,
     user => user.restaurants,
+    { onDelete: 'CASCADE' },
   )
   owner: User;
+
+  @Field(type => [Order])
+  @OneToMany(
+    type => Order,
+    order => order.restaurant,
+  )
+  orders: Order[];
 
   @RelationId((restaurant: Restaurant) => restaurant.owner)
   ownerId: number;
