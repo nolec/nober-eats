@@ -2,39 +2,6 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type User {
-  id: Float!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  email: String!
-  password: String!
-  role: UserRole!
-  verified: Boolean!
-  restaurants: [Restaurant!]!
-}
-
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
-
-enum UserRole {
-  Client
-  Owner
-  Delivery
-}
-
-type Category {
-  id: Float!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  name: String!
-  coverImage: String
-  slug: String!
-  restaurants: [Restaurant!]
-  restaurantCount: Float!
-}
-
 type DishOption {
   name: String!
   choices: [String!]
@@ -53,6 +20,60 @@ type Dish {
   options: [DishOption!]
 }
 
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type User {
+  id: Float!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  email: String!
+  password: String!
+  role: UserRole!
+  verified: Boolean!
+  restaurants: [Restaurant!]!
+  orders: [Order!]!
+  rides: [Order!]!
+}
+
+enum UserRole {
+  Client
+  Owner
+  Delivery
+}
+
+type Order {
+  id: Float!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  customer: User
+  driver: User
+  restaurant: Restaurant!
+  dishes: [Dish!]!
+  totla: Float!
+  status: OrderStatus!
+}
+
+enum OrderStatus {
+  Pending
+  Cooking
+  PickedUp
+  Delivered
+}
+
+type Category {
+  id: Float!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  name: String!
+  coverImage: String
+  slug: String!
+  restaurants: [Restaurant!]
+  restaurantCount: Float!
+}
+
 type Restaurant {
   id: Float!
   createdAt: DateTime!
@@ -62,6 +83,7 @@ type Restaurant {
   address: String!
   category: Category
   owner: User!
+  orders: [Order!]!
   menu: [Dish!]!
 }
 
@@ -117,6 +139,16 @@ type RestaurantOutput {
 }
 
 type CreateDishOutput {
+  error: String
+  ok: Boolean!
+}
+
+type EditDishOutput {
+  error: String
+  ok: Boolean!
+}
+
+type DeleteDishOutput {
   error: String
   ok: Boolean!
 }
@@ -182,6 +214,8 @@ type Mutation {
   editRestaurant(input: EditRestaurantInput!): EditRestaurantOutput!
   deleteRestaurant(input: DeleteRestaurantInput!): DeleteRestaurantOutput!
   createDish(input: CreateDishInput!): CreateDishOutput!
+  editDish(input: EditDishInput!): EditDishOutput!
+  deleteDish(input: DeleteDishInput!): DeleteDishOutput!
   createAccount(input: CreateAccountInput!): CreateAccountOutput!
   login(input: LoginInput!): LoginOutput!
   editProfile(input: EditProfileInput!): EditProfileOutput!
@@ -219,6 +253,18 @@ input DisiOptionInputType {
   name: String!
   choices: [String!]
   extra: Int
+}
+
+input EditDishInput {
+  name: String
+  price: Int
+  description: String
+  options: [DisiOptionInputType!]
+  dishId: Int!
+}
+
+input DeleteDishInput {
+  dishId: Int!
 }
 
 input CreateAccountInput {

@@ -9,7 +9,7 @@ import { CoreEntitiy } from 'src/common/entities/core.entity';
 import { Dish } from 'src/restaurants/entities/dish.entity';
 import { Restaurant } from 'src/restaurants/entities/restaurant.entity';
 import { User } from 'src/users/entities/user.entity';
-import { Column, Entity, ManyToOne } from 'typeorm';
+import { Column, Entity, JoinTable, ManyToMany, ManyToOne } from 'typeorm';
 
 export enum OrderStatus {
   Pending = 'Pending',
@@ -43,12 +43,14 @@ export class Order extends CoreEntitiy {
   @ManyToOne(
     type => Restaurant,
     restaurant => restaurant.orders,
+    //연결된 것이 삭제되면 NULL로 가능
     { onDelete: 'SET NULL', nullable: true },
   )
   restaurant: Restaurant;
 
-  @Column()
   @Field(type => [Dish])
+  @ManyToMany(type => Dish)
+  @JoinTable()
   dishes: Dish[];
 
   @Column()
