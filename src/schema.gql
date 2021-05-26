@@ -44,6 +44,14 @@ enum UserRole {
   Delivery
 }
 
+type OrderItem {
+  id: Float!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  dish: Dish!
+  options: [DishOption!]
+}
+
 type Order {
   id: Float!
   createdAt: DateTime!
@@ -51,8 +59,8 @@ type Order {
   customer: User
   driver: User
   restaurant: Restaurant!
-  dishes: [Dish!]!
-  totla: Float!
+  items: [OrderItem!]!
+  total: Float
   status: OrderStatus!
 }
 
@@ -180,6 +188,11 @@ type VerifyEmailOutput {
   ok: Boolean!
 }
 
+type CreateOrderOutput {
+  error: String
+  ok: Boolean!
+}
+
 type Query {
   allCategories: AllCategoryOutput!
   category(input: CategoryInput!): CategoryOutput!
@@ -220,6 +233,7 @@ type Mutation {
   login(input: LoginInput!): LoginOutput!
   editProfile(input: EditProfileInput!): EditProfileOutput!
   verifyEmail(input: VerifyEmailInput!): VerifyEmailOutput!
+  createOrder(input: CreateOrderInput!): CreateOrderOutput!
 }
 
 input CreateRestaurantInputType {
@@ -285,4 +299,59 @@ input EditProfileInput {
 
 input VerifyEmailInput {
   code: String!
+}
+
+input CreateOrderInput {
+  items: [OrderItemInputType!]!
+  restaurantId: Int!
+}
+
+input OrderItemInputType {
+  dish: DishInputType!
+  options: [DisiOptionInputType!]
+}
+
+input DishInputType {
+  name: String!
+  price: Int!
+  photo: String
+  description: String!
+  restaurant: RestaurantInputType!
+  options: [DisiOptionInputType!]
+}
+
+input RestaurantInputType {
+  name: String!
+  coverImage: String!
+  address: String!
+  category: CategoryInputType
+  owner: UserInputType!
+  orders: [OrderInputType!]!
+  menu: [DishInputType!]!
+}
+
+input CategoryInputType {
+  name: String!
+  coverImage: String
+  slug: String!
+  restaurants: [RestaurantInputType!]
+}
+
+input UserInputType {
+  email: String!
+  password: String!
+  role: UserRole!
+  verified: Boolean!
+  restaurants: [RestaurantInputType!]!
+  orders: [OrderInputType!]!
+  rides: [OrderInputType!]!
+}
+
+input OrderInputType {
+  customer: UserInputType
+  driver: UserInputType
+  restaurant: RestaurantInputType!
+  items: [OrderItemInputType!]!
+  total: Float
+  status: OrderStatus!
 }

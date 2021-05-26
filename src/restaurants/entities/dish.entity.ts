@@ -6,7 +6,7 @@ import { Restaurant } from './restaurant.entity';
 
 @InputType('DisiOptionInputType', { isAbstract: true })
 @ObjectType()
-class DishOption {
+export class DishOption {
   @Field(type => String)
   name: string;
 
