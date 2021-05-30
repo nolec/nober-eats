@@ -23,6 +23,7 @@ import { Dish } from './restaurants/entities/dish.entity';
 import { OrdersModule } from './orders/orders.module';
 import { Order } from './orders/entities/order.entity';
 import { OrderItem } from './orders/entities/order-item.entity';
+import { CommonModule } from './common/common.module';
 
 // console.log(Joi);
 
@@ -68,8 +69,17 @@ import { OrderItem } from './orders/entities/order-item.entity';
       ],
     }),
     GraphQLModule.forRoot({
+      //웹 소켓에 연결할 때는 쿠키를 주고 받거나 그런 것 없이 연결이 되는 그 상태를 유지한다.
+      //웹 소켓에는 request 가 없고 connection 이 존재한다.
+      installSubscriptionHandlers: true,
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
-      context: ({ req }) => ({ user: req['user'] }),
+      context: ({ req, connection }) => {
+        // console.log(req, connection);
+        const TOKEN_KEY = 'x-jwt';
+        return {
+          token: req ? req.headers[TOKEN_KEY] : connection.context[TOKEN_KEY],
+        };
+      },
     }),
     JwtModule.forRoot({ privateKey: process.env.PRIVATE_KEY }),
     MailModule.forRoot({
@@ -81,15 +91,18 @@ import { OrderItem } from './orders/entities/order-item.entity';
     UsersModule,
     RestaurantsModule,
     OrdersModule,
+    CommonModule,
   ],
   controllers: [],
   providers: [],
 })
-export class AppModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer.apply(JwtMiddleware).forRoutes({
-      path: '/graphql',
-      method: RequestMethod.POST,
-    });
-  }
+export class AppModule {
+  //  implements NestModule {
+  //미들웨어는 웹소켓 관련 일을 처리하지 않는다.
+  // configure(consumer: MiddlewareConsumer) {
+  //   consumer.apply(JwtMiddleware).forRoutes({
+  //     path: '/graphql',
+  //     method: RequestMethod.POST,
+  //   });
+  // }
 }

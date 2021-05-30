@@ -7,15 +7,22 @@ import {
 } from '@nestjs/graphql';
 import { IsEnum, IsNumber } from 'class-validator';
 import { CoreEntitiy } from 'src/common/entities/core.entity';
-import { Dish } from 'src/restaurants/entities/dish.entity';
 import { Restaurant } from 'src/restaurants/entities/restaurant.entity';
 import { User } from 'src/users/entities/user.entity';
-import { Column, Entity, JoinTable, ManyToMany, ManyToOne } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  ManyToOne,
+  RelationId,
+} from 'typeorm';
 import { OrderItem } from './order-item.entity';
 
 export enum OrderStatus {
   Pending = 'Pending',
   Cooking = 'Cooking',
+  Cooked = 'Cooked',
   PickedUp = 'PickedUp',
   Delivered = 'Delivered',
 }
@@ -29,29 +36,35 @@ export class Order extends CoreEntitiy {
   @ManyToOne(
     type => User,
     user => user.orders,
-    { onDelete: 'SET NULL', nullable: true },
+    { onDelete: 'SET NULL', nullable: true, eager: true },
   )
   customer?: User;
+
+  @RelationId((order: Order) => order.customer)
+  customerId: number;
 
   @Field(type => User, { nullable: true })
   @ManyToOne(
     type => User,
     user => user.rides,
-    { onDelete: 'SET NULL', nullable: true },
+    { onDelete: 'SET NULL', nullable: true, eager: true },
   )
   driver?: User;
 
-  @Field(type => Restaurant)
+  @RelationId((order: Order) => order.driver)
+  driverId: number;
+
+  @Field(type => Restaurant, { nullable: true })
   @ManyToOne(
     type => Restaurant,
     restaurant => restaurant.orders,
     //연결된 것이 삭제되면 NULL로 가능
-    { onDelete: 'SET NULL', nullable: true },
+    { onDelete: 'SET NULL', nullable: true, eager: true },
   )
-  restaurant: Restaurant;
+  restaurant?: Restaurant;
 
   @Field(type => [OrderItem])
-  @ManyToMany(type => OrderItem)
+  @ManyToMany(type => OrderItem, { eager: true })
   @JoinTable()
   items: OrderItem[];
 
@@ -60,7 +73,7 @@ export class Order extends CoreEntitiy {
   @IsNumber()
   total?: number;
 
-  @Column({ type: 'enum', enum: OrderStatus })
+  @Column({ type: 'enum', enum: OrderStatus, default: OrderStatus.Pending })
   @Field(type => OrderStatus)
   @IsEnum(OrderStatus)
   status: OrderStatus;
