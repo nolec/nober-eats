@@ -2,6 +2,21 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Payment {
+  id: Float!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  transactionId: String!
+  user: User!
+  restaurant: Restaurant!
+  restaurantId: Int!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
 type User {
   id: Float!
   createdAt: DateTime!
@@ -13,12 +28,8 @@ type User {
   restaurants: [Restaurant!]!
   orders: [Order!]!
   rides: [Order!]!
+  payments: [Payment!]!
 }
-
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
 
 enum UserRole {
   Client
@@ -226,6 +237,11 @@ type TakeOrderOutput {
   ok: Boolean!
 }
 
+type CreatePaymentOutput {
+  error: String
+  ok: Boolean!
+}
+
 input OrderItemOption {
   name: String!
   choice: String
@@ -284,6 +300,7 @@ type Mutation {
   createOrder(input: CreateOrderInput!): CreateOrderOutput!
   editOrder(input: EditOrderInput!): EditOrderOutput!
   takeOrder(input: TakeOrderInput!): TakeOrderOutput!
+  createPayment(input: CreatePaymentInput!): CreatePaymentOutput!
 }
 
 input CreateRestaurantInputType {
@@ -373,6 +390,11 @@ input EditOrderInput {
 
 input TakeOrderInput {
   id: Float!
+}
+
+input CreatePaymentInput {
+  transactionId: String!
+  restaurantId: Int!
 }
 
 type Subscription {

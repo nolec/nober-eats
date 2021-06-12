@@ -24,6 +24,8 @@ import { OrdersModule } from './orders/orders.module';
 import { Order } from './orders/entities/order.entity';
 import { OrderItem } from './orders/entities/order-item.entity';
 import { CommonModule } from './common/common.module';
+import { PaymentsModule } from './payments/payments.module';
+import { Payment } from './payments/entities/payment.entity';
 
 // console.log(Joi);
 
@@ -66,6 +68,7 @@ import { CommonModule } from './common/common.module';
         Dish,
         Order,
         OrderItem,
+        Payment,
       ],
     }),
     GraphQLModule.forRoot({
@@ -92,9 +95,9 @@ import { CommonModule } from './common/common.module';
     RestaurantsModule,
     OrdersModule,
     CommonModule,
+    PaymentsModule,
   ],
   controllers: [],
-  providers: [],
 })
 export class AppModule {
   //  implements NestModule {
